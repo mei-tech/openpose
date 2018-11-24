@@ -18,7 +18,7 @@ endmacro()
 
 # This list will be used for CUDA_ARCH = All option
 if (UNIX AND NOT APPLE)
-  set(Caffe_known_gpu_archs "20 21(20) 30 35 50 52 60 61")
+  set(Caffe_known_gpu_archs "30 35 50 52 60 61 70")
 elseif (WIN32)
   set(Caffe_known_gpu_archs "30 35 50 52 60 61")
 endif ()
@@ -111,6 +111,8 @@ function(op_select_nvcc_arch_flags out_variable)
     set(__cuda_arch_bin "50 52")
   elseif (${CUDA_ARCH} STREQUAL "Pascal")
     set(__cuda_arch_bin "60 61")
+  elseif (${CUDA_ARCH} STREQUAL "Volta")
+    set(__cuda_arch_bin "70")
   elseif (${CUDA_ARCH} STREQUAL "All")
     set(__cuda_arch_bin ${Caffe_known_gpu_archs})
   elseif (${CUDA_ARCH} STREQUAL "Auto")
@@ -207,7 +209,7 @@ function(detect_cuDNN)
   find_library(CUDNN_LIBRARY NAMES ${CUDNN_LIB_NAME}
    PATHS ${CUDNN_ROOT} $ENV{CUDNN_ROOT} ${CUDNN_INCLUDE} ${__libpath_hist} ${__libpath_hist}/../lib
    DOC "Path to cuDNN library.")
-  
+
   if (CUDNN_INCLUDE AND CUDNN_LIBRARY)
     set(HAVE_CUDNN  TRUE PARENT_SCOPE)
     set(CUDNN_FOUND TRUE PARENT_SCOPE)
